@@ -1,0 +1,19 @@
+.drag-and-drop{
+  background:white;
+  margin:10px auto;
+  padding:20px;
+  width:100%;
+  border:2px dashed #ccc;
+  border-radius:5px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+  &_active{
+    border-color: #98B4E4;
+  }
+}
+
+.file-input{
+  display:none;
+}

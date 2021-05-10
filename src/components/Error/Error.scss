@@ -1,0 +1,11 @@
+.error{
+  padding:10px;
+
+  &__list{
+    list-style: none;
+  }
+
+  &__item{
+    font-style:italic;
+  }
+}

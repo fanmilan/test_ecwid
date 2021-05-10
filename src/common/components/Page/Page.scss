@@ -1,0 +1,35 @@
+body{
+  overflow-y: scroll;
+}
+
+.page{
+  &__inside{
+    max-width:870px;
+    margin:auto;
+    width:100%;
+    min-width:330px;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    padding: 0 5px;
+
+  }
+}
+
+main{
+  flex:1 0;
+}
+
+.footer{
+  height:50px;
+  background:black;
+  margin-top:20px;
+}
+
+.header{
+  margin-bottom:10px;
+  &__title{
+    text-align: center;
+  }
+}
