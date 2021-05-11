@@ -1,14 +1,19 @@
 import './Page.scss';
+import {memo} from "react";
 
-import {Gallery} from "../../../components/Gallery/Gallery";
-import {UploadField} from "../../../components/UploadField/UploadField";
 
-export const Page = () => {
+type pageP = {
+    name: string,
+    children: React.ReactNode
+}
+
+export const Page = ({name, children}: pageP) => {
     return <div className={'page'}>
         <div className="page__inside">
-            <Header title={'Галерея изображений'}/>
-            <Main />
-            <Footer />
+            <Header title={name}/>
+            <Main>
+                {children}
+            </Main>
         </div>
     </div>
 }
@@ -18,10 +23,15 @@ type headerProps = {
     title: string
 }
 
-const Header = ({title} : headerProps) => <header className={'header'}>
+const Header = memo(({title}: headerProps) => <header className={'header'}>
     <h1 className="header__title">{title}</h1>
-</header>;
-const Main = () => <main>
-    <Gallery />
-</main>;
-const Footer = () => <footer className={"footer"}></footer>;
+</header>);
+
+
+type mainP = {
+    children: React.ReactNode
+}
+
+const Main = ({children} : mainP) => <div className={'main'}>
+    {children}
+</div>;

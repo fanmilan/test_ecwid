@@ -1,43 +1,56 @@
 import {Constants, galleryActionsT, imageT, jsonFormatT} from "../types/gallery";
 import { action } from 'typesafe-actions';
-import {Dispatch} from "redux";
 import {addNewError} from "./error";
+import uniqid from 'uniqid';
+
+import { ThunkAction } from 'redux-thunk'
+import {rootStateT} from "../store/store";
 
 
 
 export const changeWidth = (width: number) => action(Constants.CHANGE_WIDTH, {width: width});
 export const calcGallery = (width: number) => action(Constants.CALC_GALLERY, {width: width});
 export const addImage = (image: imageT) => action(Constants.ADD_IMAGE, {image});
-export const deleteImage = (index: number) => action(Constants.DELETE_IMAGE, {index});
+export const deleteImage = (id: string) => action(Constants.DELETE_IMAGE, {id});
+export const addImageRequest = (image: imageT) => action(Constants.ADD_IMAGE_REQUEST, {image});
+export const addMassiveImageRequest = (images: Array<imageT>) => action(Constants.ADD_MASSIVE_IMAGE_REQUEST, {images});
 
 
+type ThunkActionT = ThunkAction<void, rootStateT, unknown, galleryActionsT>;
 
-export const addImageFromLink = (image_url: string, width:number = 300, height:number = 300): any => (dispatch: Dispatch<galleryActionsT>, getState: any) => {
-    const state = getState();
-    const image_id = state.gallery.images.reduce((max: number, item: imageT) => (item.id > max) ? item.id : max, 0) + 1;
-    // mb use index of array
-    dispatch({
-        type: Constants.ADD_IMAGE_REQUEST,
-        payload: {
-            id: image_id,
-            url: image_url,
-            isLoading: true,
-            width: width,
-            height: height
-        }
-    });
-    /* ADD PLACEHOLDER IMAGE */
-    const newImage = new Image();
-    newImage.src = image_url;
-    newImage.onload = () => {
-        dispatch(addImage({id: image_id, url: image_url, height: newImage.height, width: newImage.width, isLoading: false}));
-    };
+
+const addImageFromLink = (image_url: string, width:number = 300, height:number = 300): ThunkActionT  => (dispatch) => {
+   // const image_id = state.gallery.images.reduce((max: number, item: imageT) => (item.id > max) ? item.id : max, 0) + 1;
+    const newImage = {
+        id: uniqid(),
+        url: image_url,
+        isLoading: true,
+        width: width,
+        height: height
+    }
+
+    dispatch(addImageRequest(newImage));
+
+    dispatch(waitImageLoad(newImage));
 }
 
-export const addImageFromJson = (result: jsonFormatT) => (dispatch: any) => {
+
+const waitImageLoad = (image: imageT) : ThunkActionT => (dispatch) => {
+    const newImage = new Image();
+    newImage.src = image.url;
+    newImage.onload = () => {
+        dispatch(addImage({...image, height: newImage.height, width: newImage.width, isLoading: false}))
+    }
+}
+
+const addImageFromJson = (result: jsonFormatT): ThunkActionT => (dispatch) => {
     if (result.galleryImages) {
-        result.galleryImages.forEach((item) => {
-            dispatch(addImageFromLink(item.url, item.width, item.height));
+        const images = result.galleryImages.map((item)=> ({...item, id: uniqid(), isLoading:true}));
+
+        dispatch(addMassiveImageRequest(images));
+
+        images.forEach((item) => {
+            dispatch(waitImageLoad(item));
         });
     } else {
         dispatch(addNewError('Некорректный формат JSON.'));
@@ -45,9 +58,9 @@ export const addImageFromJson = (result: jsonFormatT) => (dispatch: any) => {
 }
 
 
-export const uploadImageFromJSON = (json_link: string): any => (dispatch: Dispatch<galleryActionsT>) => {
+const uploadImageFromJSON = (json_link: string): ThunkActionT => (dispatch) => {
     fetch(json_link)
-        .then((res: any) => {
+        .then((res) => {
             if (!res.ok) throw new Error('not OK');
             return res.json();
         }).then((result: jsonFormatT) => {
@@ -57,7 +70,7 @@ export const uploadImageFromJSON = (json_link: string): any => (dispatch: Dispat
         });
 }
 
-export const uploadFromLink = (url: string): any => (dispatch: Dispatch<galleryActionsT>) => {
+export const uploadFromLink = (url: string): ThunkActionT => (dispatch) => {
     if (url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
         dispatch(addImageFromLink(url));
     } else if (url.match(/\.(json)$/) !== null) {
@@ -67,7 +80,7 @@ export const uploadFromLink = (url: string): any => (dispatch: Dispatch<galleryA
     }
 }
 
-export const uploadImageFromLocale = (files: FileList) => (dispatch: any) => {
+export const uploadImageFromLocale = (files: FileList): ThunkActionT => (dispatch) => {
     for (let i = 0; i < files.length; i++) {
         switch (files[i].type) {
             case 'image/jpeg':

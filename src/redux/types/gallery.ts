@@ -1,7 +1,7 @@
-import * as actions from '../actions/gallery';
+import {addImage, deleteImage, addImageRequest, addMassiveImageRequest, changeWidth, calcGallery} from '../actions/gallery';
 import {ActionType} from "typesafe-actions";
 
-export type galleryActionsT = ActionType<typeof actions>;
+export type galleryActionsT = ActionType<typeof addImage | typeof deleteImage | typeof addImageRequest | typeof addMassiveImageRequest | typeof changeWidth | typeof calcGallery>;
 
 type imageJsonT = {
     url: string,
@@ -10,11 +10,11 @@ type imageJsonT = {
 }
 
 export type imageT = {
-    id: number,
+    id: string,
     url: string,
     width: number,
     height: number,
-    sizeInGallery?: {width: number, height: number, marginRight: number},
+    sizeInGallery?: {width: number, height: number, marginRight: number, marginTop: number},
     isLoading: boolean
 }
 
@@ -25,6 +25,7 @@ export type galleryStateT = {
 
 export enum Constants {
     ADD_IMAGE_REQUEST = 'ADD_IMAGE_REQUEST',
+    ADD_MASSIVE_IMAGE_REQUEST = 'ADD_MASSIVE_IMAGE_REQUEST',
     ADD_IMAGE = 'ADD_IMAGE',
     DELETE_IMAGE = 'DELETE_IMAGE',
     CALC_GALLERY = 'CALC_GALLERY',

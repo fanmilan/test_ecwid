@@ -1,7 +1,7 @@
-import * as actions from '../actions/error';
+import {addError, removeError} from '../actions/error';
 import {ActionType} from "typesafe-actions";
 
-export type errorActionsT = ActionType<typeof actions>;
+export type errorActionsT = ActionType<typeof addError | typeof removeError>;
 
 
 export type errorT = {

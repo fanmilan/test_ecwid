@@ -12,51 +12,52 @@ export const DragAndDrop = () => {
     const dragNDropRef = useRef<HTMLDivElement>(null);
     const inputFileRef = useRef<HTMLInputElement>(null);
 
-    const uploadFromLocal = (e: any) => {
+    const uploadFromLocal = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
-        if (files.length > 0) {
-            dispatch(uploadImageFromLocale(e.target.files));
-            e.target.value = null;
+        if (files && files.length > 0) {
+            dispatch(uploadImageFromLocale(files));
+            e.target.value = '';
         }
-    }
-
-    let dragCounter = 0;
-
-    const handleDragIn = (e: DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dragCounter++;
-        if (e.dataTransfer && e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-            setDragging(true);
-        }
-    }
-
-    const handleDragOut = (e: DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dragCounter--;
-        if (dragCounter === 0) setDragging(false);
-    }
-
-    const handleDrag = (e: DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    const handleDrop = (e: DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragging(false);
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            dispatch(uploadImageFromLocale(e.dataTransfer.files))
-            e.dataTransfer.clearData();
-        }
-        dragCounter = 0;
     }
 
 
     useEffect(() => {
         let dragNDropEl = dragNDropRef.current;
+
+        let dragCounter = 0;
+
+        const handleDragIn = (e: DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter++;
+            if (e.dataTransfer && e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+                setDragging(true);
+            }
+        }
+
+        const handleDragOut = (e: DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter--;
+            if (dragCounter === 0) setDragging(false);
+        }
+
+        const handleDrag = (e: DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        const handleDrop = (e: DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragging(false);
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                dispatch(uploadImageFromLocale(e.dataTransfer.files))
+                e.dataTransfer.clearData();
+            }
+            dragCounter = 0;
+        }
+
         if (dragNDropEl) {
             dragNDropEl.addEventListener('dragenter', handleDragIn);
             dragNDropEl.addEventListener('dragleave', handleDragOut);

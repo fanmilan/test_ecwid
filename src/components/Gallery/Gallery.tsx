@@ -1,18 +1,12 @@
 import './Gallery.scss';
-import {useEffect, useRef, useState} from "react";
+
+import {useEffect, useRef} from "react";
 import {UploadField} from "../UploadField/UploadField";
-import {DragAndDrop} from "../DragAndDrop/DragAndDrop";
 import {useDispatch, useSelector} from "react-redux";
-import {calcGallery, changeWidth, deleteImage} from "../../redux/actions/gallery";
+import {changeWidth} from "../../redux/actions/gallery";
 import {GalleryItem} from "../GalleryItem/GalleryItem";
 import {rootStateT} from "../../redux/store/store";
-
-
-type imageT = {
-    url: string,
-    width: number,
-    height: number
-}
+import {imageT} from "../../redux/types/gallery";
 
 
 export const Gallery = () => {
@@ -25,17 +19,15 @@ export const Gallery = () => {
 
     const dispatch = useDispatch();
 
-
-    function listener() {
-        changeWidthAction();
-    }
-
     useEffect(() => {
+        const changeWidthListener = () => {
+            changeWidthAction();
+        }
         changeWidthAction();
-        window.addEventListener('resize', listener);
+        window.addEventListener('resize', changeWidthListener);
 
         return () => {
-            window.removeEventListener('resize', listener);
+            window.removeEventListener('resize', changeWidthListener);
         }
     }, []);
 
@@ -45,19 +37,16 @@ export const Gallery = () => {
         let el = galleryRef.current;
         if (el) {
             const width = el.clientWidth;
-            console.log(width);
             dispatch(changeWidth(width));
         }
-
     }
-
 
 
     return <>
         <UploadField />
         <div className={'gallery'} ref={galleryRef}>
             {
-                images.map((item: imageT, index: number) => <GalleryItem key={index} item={item} index={index}/>)
+                (images.length) ? (images.map((item: imageT) => <GalleryItem key={item.id} item={item}/>)) : <div className={'gallery__empty'}>Галерея пуста</div>
             }
         </div>
     </>;
