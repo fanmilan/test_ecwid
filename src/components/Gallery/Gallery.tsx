@@ -29,7 +29,7 @@ export const Gallery = () => {
         return () => {
             window.removeEventListener('resize', changeWidthListener);
         }
-    }, []);
+    }, [dispatch]);
 
 
 

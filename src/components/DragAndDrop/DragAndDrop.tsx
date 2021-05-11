@@ -74,7 +74,7 @@ export const DragAndDrop = () => {
             }
         }
 
-    }, []);
+    }, [dispatch]);
 
     return <div className={'drag-and-drop' + ((dragging) ? ' drag-and-drop_active' : '')} ref={dragNDropRef}>
         <div className={'drag-and-drop__text'}>
