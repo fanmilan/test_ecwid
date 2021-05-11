@@ -12,11 +12,9 @@ const initialState: galleryStateT = {
 }
 
 
-
 export const galleryReducer = (state: galleryStateT = initialState, action: galleryActionsT): galleryStateT => {
-    switch (action.type){
+    switch (action.type) {
         case Constants.CHANGE_WIDTH:
-            console.log('width_change');
             return {
                 ...state,
                 width: action.payload.width,
@@ -46,7 +44,7 @@ export const galleryReducer = (state: galleryStateT = initialState, action: gall
             let index = newImageForAdd.findIndex((item) => item.id === image.id);
 
             if (index !== -1) {
-                const shouldCalcG =  !(compareSizesPlaceholderAndImg(newImageForAdd[index], image));
+                const shouldCalcG = !(compareSizesPlaceholderAndImg(newImageForAdd[index], image));
                 newImageForAdd[index] = image;
                 if (shouldCalcG) {
                     calcGallery(newImageForAdd, state.width);
@@ -75,7 +73,6 @@ const compareSizesPlaceholderAndImg = (image: imageT, newImage: imageT) => {
 }
 
 
-
 function calcGallery(images: Array<imageT>, width: number) {
 
     let sumRatio = 0;
@@ -89,14 +86,16 @@ function calcGallery(images: Array<imageT>, width: number) {
     let margin = PARAMS.MARGIN;
     let prevHRow = 0;
 
-    for (let i=0; i<ratioArr.length; i++) {
+    for (let i = 0; i < ratioArr.length; i++) {
         let ratio = ratioArr[i];
         keys.push([i, ratio]);
         sumRatio += ratio;
 
         let hRow = Math.round((width - (keys.length - 1) * margin) / sumRatio);
 
-        if (hRow > baseHeight) {
+        let lastIteration = (i === ratioArr.length - 1);
+
+        if (hRow > baseHeight && !(lastIteration && hRow < baseHeight * 1.5)) {
             prevHRow = hRow;
         } else {
 
@@ -104,15 +103,13 @@ function calcGallery(images: Array<imageT>, width: number) {
             *   Compare Two Heights Of Row : 1 - less than baseH, 2 - more than baseH
             *   Take closest one
             *  */
-            if (Math.abs(hRow - baseHeight) > Math.abs(prevHRow - baseHeight)) {
-                console.log(prevHRow);
+
+            if (prevHRow > 0  && Math.abs(hRow - baseHeight) > Math.abs(prevHRow - baseHeight)) {
                 hRow = prevHRow;
                 i--;
                 keys.pop();
-            } else {
-                console.log(hRow);
             }
-
+            
             let sumW = 0;
             keys.forEach(([key, ratio], keyIndex) => {
                 let picW = 0;
@@ -125,14 +122,12 @@ function calcGallery(images: Array<imageT>, width: number) {
                     sumW += picW;
                 }
 
-                console.log(key + '->' + hRow);
-
-                 newImages[key].sizeInGallery = {
-                     height: hRow,
-                     width: picW,
-                     marginRight: marginRight,
-                     marginTop: margin
-                 };
+                newImages[key].sizeInGallery = {
+                    height: hRow,
+                    width: picW,
+                    marginRight: marginRight,
+                    marginTop: margin
+                };
             });
             sumRatio = 0;
             keys = [];
@@ -158,4 +153,3 @@ function calcGallery(images: Array<imageT>, width: number) {
 
     return newImages;
 }
-
