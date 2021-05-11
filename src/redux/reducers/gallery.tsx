@@ -95,6 +95,7 @@ function calcGallery(images: Array<imageT>, width: number) {
 
         let lastIteration = (i === ratioArr.length - 1);
 
+        /* last row is special case */
         if (hRow > baseHeight && !(lastIteration && hRow < baseHeight * 1.5)) {
             prevHRow = hRow;
         } else {
@@ -109,7 +110,7 @@ function calcGallery(images: Array<imageT>, width: number) {
                 i--;
                 keys.pop();
             }
-            
+
             let sumW = 0;
             keys.forEach(([key, ratio], keyIndex) => {
                 let picW = 0;
