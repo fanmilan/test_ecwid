@@ -1,46 +1,25 @@
-# Getting Started with Create React App
+<h1>Галерея изображений</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+<h2>Задача</h2>
+Сделать страницу с галереей изображений на JS, jQuery, Elm, React, Vue, etc. Можно использовать любые JS-фреймворки, однако мы категорически просим вас воздержаться от использования готовых решений, реализующих галерею, так как смысл любого тестового задания — демонстрация ваших знаний и возможностей.
 
-In the project directory, you can run:
+Страница должна содержать два компонента:
+Компонент загрузки картинок.
+Должен быть реализован в виде поля ввода и кнопки “Загрузить”. В поле можно ввести урл до картинки или загрузить файл со списком картинок. Формат файла —JSON. Можно использовать данный файл, сделать его копию на стороннем сервере или просто сохранить и загружать его с локального компьютера.
+Галерея картинок.
+Должен быть реализован в виде упорядоченного набора превью всех картинок, загруженных в галерею.
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+<h2>Требования к галерее</h2>
+<ul>
+<li>Нужно разместить картинки галереи рядами. Количество рядов не ограничено.</li>
+<li>Ряды должны быть одинаковы по ширине, но могут различаться по высоте.</li>
+<li>Все картинки в одном ряду должны быть одинаковы по высоте.</li>
+<li>У картинок должны быть сохранены пропорции.</li>
+<li>Интерфейс должен быть responsive, максимальная ширина контейнера — 860 px, минимальная – 320 px.</li>
+<li>Количество картинок в каждом ряду не фиксировано. При сужении/расширении галереи их количество может меняться. </li>
+<li>Важно, чтобы на картинки было приятно смотреть: на мобильных они не должны быть слишком мелкими, на десктопах не должны быть слишком крупными.</li>
+<li>Следует добавить плейсхолдеры на время загрузки. Внешний вид выберите на усмотрение кандидата.</li>
+<li>Предусмотрите  возможность добавить картинку drag-n-drop в уже готовую загруженную галерею.</li>
+<li>Добавьте возможность удалить картинку из галереи.</li>
+</ul>
